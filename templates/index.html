@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI應用規劃師初級歷屆考題</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        input {
+            width: 75%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 60%;
+            padding: 5px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        select {
+            width: 60%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>題數選擇</h2>
+    <form action="/" method="POST">
+        <select class="Qus" name="Qusmodul-select" required>
+            <option disabled="disabled" selected="selected" value>-- 請選擇答題方式 --</option>
+            {% for item in class_list %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">送出</button>
+    </form>
+<br>
+<a href="https://ipas.tw/"> Learn More Welcome To This Page </a>
+</div>
+</body>
+</html>

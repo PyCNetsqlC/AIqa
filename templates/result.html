@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>測驗結果報告</title>
+    <style>
+        /* 基礎全域樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        /* 結果卡片主容器 */
+        .result-container {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 750px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        /* 大字體總分顯示 */
+        .score-display {
+            font-size: 64px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 15px 0;
+        }
+        /* 資料統計文字 */
+        .stats {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 35px;
+        }
+        /* 錯題檢討區塊 */
+        .wrong-section {
+            text-align: left;
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 25px;
+        }
+        /* 單條錯題卡片 */
+        .wrong-card {
+            background-color: #fff5f5;
+            border-left: 5px solid #dc3545;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        /* 按鈕群組 */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+        /* 通用按鈕樣式 */
+        .btn {
+            font-size: 18px;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        /* 重新作答按鈕（藍色） */
+        .btn-retry {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-retry:hover {
+            background-color: #0056b3;
+        }
+        /* 返回首頁按鈕（灰色） */
+        .btn-home {
+            background-color: #6c757d;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-home:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-container">
+    <h1 style="color: #333; margin-top: 0;">🎯 測試成績報告</h1>
+    
+    <!-- 1. 總分大字體顯示 -->
+    <div class="score-display">{{ score }} 分</div>
+    
+    <!-- 2. 答題數據統計 -->
+    <div class="stats">
+        總題數：<strong>{{ total }}</strong> 題 | 
+        答對：<span style="color: #28a745; font-weight: bold;">{{ correct }}</span> 題 | 
+        答錯：<span style="color: #dc3545; font-weight: bold;">{{ wrong }}</span> 題
+    </div>
+
+    <!-- 3. 錯題紀錄檢討區 -->
+    <div class="wrong-section">
+        <h3 style="color: #333; margin-top: 0; margin-bottom: 15px;">❌ 錯題檢討清單</h3>
+        
+        <!-- 判斷是否有錯題紀錄 -->
+        {% if wrong_len !=0 %}
+            {% for record in wrong_records %}
+            <div class="wrong-card">
+                <div style="font-weight: bold; font-size: 18px; color: #c9302c; margin-bottom: 8px;">
+                    第 {{ record.id }} 題
+                </div>
+                <!-- 顯示錯題的詳細對比 -->
+                <div style="font-size: 16px; color: #444; line-height: 1.5;">
+                    您的作答：<span style="color: #dc3545; font-weight: bold; margin-right: 25px;">{{ record.your_ans }}</span>
+                    正確答案：<span style="color: #28a745; font-weight: bold;">{{ record.correct_ans }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- 滿分時的祝賀視覺 -->
+            <div style="text-align: center; padding: 30px 0;">
+                <p style="color: #28a745; font-weight: bold; font-size: 22px; margin: 0;">
+                    🎉 太強了！全部答對，沒有任何錯題紀錄！
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- 4. 功能引導按鈕組 -->
+    <div class="btn-group">
+        <!-- 重新作答：利用 JS 的 history.back() 讓瀏覽器直接返回考卷頁面，免去後端重新抽題的負擔 -->
+        <button onclick="window.history.back();" class="btn btn-retry">重新作答</button>
+        
+        <!-- 返回首頁：直接導向你的 Flask 首頁路由（通常為 / ） -->
+        <a href="/" class="btn btn-home">返回首頁</a>
+    </div>
+</div>
+
+</body>
+</html>

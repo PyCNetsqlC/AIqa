@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初級隨機考題{{num}}題</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .quiz-container {
+            background: white;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 950px;
+            box-sizing: border-box;
+        }
+        .quiz-radio {
+            margin: 0 !important;
+            padding: 0 !important;
+            transform: scale(1.4);
+            accent-color: #007bff;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .submit-btn {
+            font-size: 18px;
+            padding: 12px 50px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <!-- 💡 核心修正：為 form 加上 id="quizForm" -->
+    <form id="quizForm" action="/testquestion.html" method="POST" style="margin: 0; padding: 0; text-align: left;">
+        
+        <!-- 把這次的總題數藏在表單裡一併 POST 回傳 -->
+        <input type="hidden" name="number" value="{{ num }}">
+
+        {% for item in response_json %}
+        <div style="margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px solid #eaeaea; text-align: left;">
+            
+            <!-- 隱藏的正確答案框格 -->
+            <input type="hidden" name="ans_{{ item.id }}" value="{{ item.correct_answer }}">
+
+            <!-- 題目區 -->
+            <div style="margin-bottom: 18px; text-align: left;">
+                <p style="font-weight: bold; font-size: 24px; color: #222; margin: 0; line-height: 1.5; text-align: left;">
+                    {{ item.id }}. {{ item.question }}
+                </p>
+            </div>
+            
+            <!-- 選項垂直換行 -->
+            <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start; text-align: left;">
+                
+                <!-- 選項 A -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 0; margin: 0; text-align: left;">
+                        <!-- 💡 核心修正：為 input 加上 class="quiz-option" 方便 JS 統計 -->
+                        <input type="radio" name="qus_{{ item.id }}" value="A" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding: 0 0 0 2ch; margin: 0; text-align: left;">A. {{ item.options_1 | replace('(A)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 B -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 0; margin: 0; text-align: left;">
+                        <input type="radio" name="qus_{{ item.id }}" value="B" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding: 0 0 0 2ch; margin: 0; text-align: left;">B. {{ item.options_2 | replace('(B)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 C -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 0; margin: 0; text-align: left;">
+                        <input type="radio" name="qus_{{ item.id }}" value="C" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding: 0 0 0 2ch; margin: 0; text-align: left;">C. {{ item.options_3 | replace('(C)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 D -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 0; margin: 0; text-align: left;">
+                        <input type="radio" name="qus_{{ item.id }}" value="D" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding: 0 0 0 2ch; margin: 0; text-align: left;">D. {{ item.options_4 | replace('(D)', '') }}</span>
+                    </label>
+                </div>
+                
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 送出按鈕 -->
+        <div style="text-align: left; padding-top: 10px;">
+            <button type="submit" class="submit-btn">送出答案</button>
+        </div>
+    </form>
+</div>
+
+<!-- 💡 核心新增：JavaScript 表單驗證腳本 -->
+<script>
+document.getElementById('quizForm').onsubmit = function(event) {
+    // 1. 獲取這次測驗的總題數（動態讀取 Jinja2 傳過來的 num 變數）
+    const totalQuestions = parseInt("{{ num }}") || 50; 
+    let unanswered = [];
+
+    // 2. 檢查每一題是否有被勾選
+    for (let i = 1; i <= totalQuestions; i++) {
+        // 尋找 name 為題號且被選中的 radio 按鈕
+        const checkedOption = document.querySelector(`input[name="qus_${i}"]:checked`);
+        if (!checkedOption) {
+            unanswered.push(i); // 如果沒勾選，就把題號記下來
+        }
+    }
+
+    // 3. 如果發現有沒寫的題目，跳出提醒視窗
+    if (unanswered.length > 0) {
+        // 將未寫題目的題號用逗號串接（例如：1, 4, 12）
+        const questionList = unanswered.join(', ');
+        
+        // 顯示確認對話框
+        const confirmSubmit = confirm(`您還有以下題目未作答：第 ${questionList} 題。\n\n確定要直接送出評分嗎？`);
+        
+        // 如果使用者點擊「取消」，就攔截表單送出（停在原網頁）
+        if (!confirmSubmit) {
+            event.preventDefault(); 
+            return false;
+        }
+    }
+    // 如果全部都寫了，或者使用者點擊確定強制送出，表單就會正常 POST 回後端
+};
+</script>
+
+</body>
+</html>

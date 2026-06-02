@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初級隨機考題{{num}}題</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .quiz-container {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 850px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        /* 💡 核心樣式：預設將所有題目隱藏，由 JS 動態打開 */
+        .question-card {
+            display: none;
+        }
+        /* 第一題預設顯示 */
+        .question-card.active {
+            display: block;
+        }
+        .quiz-radio {
+            margin: 0 !important;
+            padding: 0 !important;
+            transform: scale(1.4);
+            accent-color: #007bff;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        /* 頂部進度條 */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+        }
+        /* 分頁控制區 */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .nav-btn {
+            font-size: 16px;
+            padding: 10px 25px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-btn:hover {
+            background-color: #f8f9fa;
+        }
+        .submit-btn {
+            font-size: 18px;
+            padding: 10px 40px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none; /* 只有最後一題才出現 */
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <!-- 頂部進度顯示 -->
+    <div style="display: flex; justify-content: space-between; font-size: 16px; color: #666; margin-bottom: 8px;">
+        <span id="progress-text">第 1 題 / 共 {{ num }} 題</span>
+    </div>
+    <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+    </div>
+
+    <form id="quizForm" action="/testquestion.html" method="POST" style="margin: 0; padding: 0; text-align: left;">
+        <!-- 總題數隱藏欄位 -->
+        <input type="hidden" name="number" value="{{ num }}">
+
+        <!-- 用 loop.index0 來做 JS 的陣列索引判定 -->
+        {% for item in response_json %}
+        <!-- 💡 核心修正：加上 class="question-card" 並判斷第一題加上 active -->
+        <div class="question-card {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}">
+            
+            <!-- 隱藏的正確答案框格 -->
+            <input type="hidden" name="ans_{{ item.id }}" value="{{ item.correct_answer }}">
+
+            <!-- 題目區 -->
+            <div style="margin-bottom: 25px; text-align: left;">
+                <p style="font-weight: bold; font-size: 24px; color: #222; margin: 0; line-height: 1.5; text-align: left;">
+                    {{ item.id }}. {{ item.question }}
+                </p>
+            </div>
+            
+            <!-- 選項區 -->
+            <div style="display: flex; flex-direction: column; gap: 18px; align-items: flex-start; text-align: left;">
+                
+                <!-- 選項 A -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
+                        <input type="radio" name="qus_{{ item.id }}" value="A" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">A. {{ item.options_1 | replace('(A)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 B -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
+                        <input type="radio" name="qus_{{ item.id }}" value="B" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">B. {{ item.options_2 | replace('(B)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 C -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
+                        <input type="radio" name="qus_{{ item.id }}" value="C" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">C. {{ item.options_3 | replace('(C)', '') }}</span>
+                    </label>
+                </div>
+                
+                <!-- 選項 D -->
+                <div style="width: 100%; font-size: 18px; text-align: left;">
+                    <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
+                        <input type="radio" name="qus_{{ item.id }}" value="D" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">D. {{ item.options_4 | replace('(D)', '') }}</span>
+                    </label>
+                </div>
+                
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- 底部控制按鈕區 -->
+        <div class="nav-controls">
+            <!-- 上一題按鈕 -->
+            <button type="button" id="prevBtn" class="nav-btn" style="visibility: hidden;">上一題</button>
+            
+            <!-- 送出按鈕（只有最後一題會顯現代替下一題） -->
+            <button type="submit" id="submitBtn" class="submit-btn">送出答案</button>
+        </div>
+    </form>
+</div>
+
+<!-- 💡 核心新增：一頁一題自動換題 JS 腳本 -->
+<script>
+let currentStep = 0;
+const cards = document.querySelectorAll('.question-card');
+const totalSteps = cards.length;
+
+const prevBtn = document.getElementById('prevBtn');
+const submitBtn = document.getElementById('submitBtn');
+const progressText = document.getElementById('progress-text');
+const progressFill = document.getElementById('progress-fill');
+
+// 更新畫面狀態
+function updateQuizView() {
+    cards.forEach((card, index) => {
+        if (index === currentStep) {
+            card.classList.add('active');
+        } else {
+            card.classList.remove('active');
+        }
+    });
+
+    // 控制「上一題」按鈕顯示
+    prevBtn.style.visibility = (currentStep === 0) ? 'hidden' : 'visible';
+
+    // 如果到最後一題，隱藏自動跳轉，顯示送出按鈕
+    if (currentStep === totalSteps - 1) {
+        submitBtn.style.display = 'block';
+    } else {
+        submitBtn.style.display = 'none';
+    }
+
+    // 更新進度條
+    progressText.innerText = `第 ${currentStep + 1} 題 / 共 ${totalSteps} 題`;
+    const progressPercent = ((currentStep + 1) / totalSteps) * 100;
+    progressFill.style.width = `${progressPercent}%`;
+}
+
+// 💡 監聽所有 Radio 按鈕：點擊後延遲 300 毫秒自動跳下一題
+document.querySelectorAll('.quiz-option').forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (currentStep < totalSteps - 1) {
+            setTimeout(() => {
+                currentStep++;
+                updateQuizView();
+            }, 300); // 延遲 300ms 讓使用者看清點擊反饋
+        }
+    });
+});
+
+// 上一題點擊事件
+prevBtn.addEventListener('click', () => {
+    if (currentStep > 0) {
+        currentStep--;
+        updateQuizView();
+    }
+});
+
+// 初始化第一題視圖
+updateQuizView();
+
+// 點擊送出表單時進行防呆攔截
+document.getElementById('quizForm').onsubmit = function(event) {
+    let unanswered = [];
+    for (let i = 1; i <= totalSteps; i++) {
+        const checkedOption = document.querySelector(`input[name="qus_${i}"]:checked`);
+        if (!checkedOption) unanswered.push(i);
+    }
+
+    if (unanswered.length > 0) {
+        const confirmSubmit = confirm(`您還有未作答題目（第 ${unanswered.join(', ')} 題）。\n\n確定要直接送出評分嗎？`);
+        if (!confirmSubmit) {
+            event.preventDefault();
+            // 自動跳轉回第一個沒寫的題目
+            currentStep = unanswered[0] - 1;
+            updateQuizView();
+            return false;
+        }
+    }
+};
+</script>
+
+</body>
+</html>
