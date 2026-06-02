@@ -1,0 +1,11 @@
+flask
+csv
+requests
+json
+random
+bs4
+pypdf
+io
+re
+os
+gunicorn
