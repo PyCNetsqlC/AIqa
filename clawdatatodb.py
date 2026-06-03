@@ -43,7 +43,6 @@ def returnnal():
                 for j in sa:
                     cc += j     
 
-
             #correct_answer
             for match in re.compile(r"([A-DＡ-Ｄ])\s+(\d+)\.").finditer(cc):
                 #對應([A-D])
@@ -53,8 +52,8 @@ def returnnal():
                 correct_answer.append([question_num,answer])
             if len(correct_answer) != 50 :
                 print(f"選項數目不對，出錯容器: correct_answer")
-                
 
+                
             #qus
             for j in range(len(cc)):
                 if re.match(r"[1-5][0-9]\. ", cc[j:j+4]):
