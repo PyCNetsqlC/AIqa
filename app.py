@@ -131,7 +131,7 @@ def get_all():
         [get_csvdict][0][i]["id"] = str(i)
         all_data.append([get_csvdict][0][i])
     json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return Response(json_api, mimetype='application/json')
+    return json_api
 
 
 
