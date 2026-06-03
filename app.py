@@ -1,6 +1,7 @@
 from flask import Flask, jsonify,render_template,request
 import csv,requests,json,random
 from flask_apscheduler import APScheduler
+from datetime import datetime  
 from clawdatatodb import returnnal
 
 with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f:
@@ -18,8 +19,20 @@ with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f
                     csv_text[0][6]:csv_text[i][6]}})
 
 
+
 app = Flask(__name__)
 scheduler = APScheduler()
+
+scheduler.add_job(
+    id='startup_update_job',
+    func=returnnal,
+    trigger='date',
+    run_date=datetime.now(),
+)
+
+scheduler.init_app(app)
+scheduler.start()
+
 '''mainpage'''
 
 @app.route('/',methods=["GET","POST"])
@@ -48,7 +61,6 @@ def index():
         return render_template("testquestion.html",num=num,response_json=response_json)
     
     return render_template("index.html",class_list=class_list)
-
 
 
 
@@ -176,21 +188,6 @@ def randm_50():
 
 if __name__ == "__main__":
     # 設定定時排程（範例：每天台灣中午 12 點執行 = UTC 4 點）
-    scheduler.add_job(
-        id='pdf_scraper_job', 
-        func=returnnal, 
-        trigger='cron', 
-        day=1, 
-        hour=0, 
-        minute=0,
-        end_date='2027-6-30 23:59:59'  # 👈 超過這個日子後，這個任務就不會再觸發了
-    )
-
-    scheduler.init_app(app)
-    scheduler.start()
-    print("🚀 背景排程器已成功啟動！")    
-    # 保留 ebug=True，但必須手動關閉 reloader 機制
-    
     app.run(host='0.0.0.0',debug=True, use_reloader=False, port=8000)
 
 
