@@ -110,8 +110,8 @@ def get_all():
     for i in range(1,len([csv_dict][0])+1):
         [csv_dict][0][i]["id"] = str(i)
         all_data.append([csv_dict][0][i])
-    #json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return jsonify(all_data)
+    json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
+    return jsonify(json_api)
 
 
 #random_qus_10
@@ -132,8 +132,8 @@ def randm_10():
         random_qus.append(csv_dict[f])
         if len(random_num)==10:
             break
-    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(random_qus)
+    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(json_api)
 
 
 #random_qus_25
@@ -154,8 +154,8 @@ def randm_25():
         random_qus.append(csv_dict[f])
         if len(random_num)==25:
             break
-    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(random_qus)
+    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(json_api)
 
 
 #random_qus_50
@@ -176,8 +176,8 @@ def randm_50():
         random_qus.append(csv_dict[f])
         if len(random_num)==50:
             break
-    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(random_qus)
+    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(json_api)
 
 
 if __name__ == "__main__":
