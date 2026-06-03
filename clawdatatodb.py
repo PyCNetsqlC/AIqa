@@ -14,7 +14,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-response = requests.get(url_oragin, headers=headers, timeout=10)
+response = requests.get(url_oragin, headers=headers, timeout=10.,verify=False)
 response.raise_for_status()  # 檢查請求是否成功
 response.encoding = response.apparent_encoding
 soup = BeautifulSoup(response.text, 'html.parser')
@@ -32,7 +32,7 @@ study_url = [ i.lstrip('\\"url\\":\\').rstrip('\"\\') for i in strfire if ('\\"u
 alldata = []
 for _ in study_url:
     dataurl = _
-    data = requests.get(dataurl, headers=headers, timeout=10)
+    data = requests.get(dataurl, headers=headers, timeout=10,verify=False)
     if data.status_code == 200:
         pdf_file = io.BytesIO(data.content)
         reader = PdfReader(pdf_file)

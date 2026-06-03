@@ -32,12 +32,12 @@ def index():
         x = request.form.get("Qusmodul-select")
         if request.form.get("Qusmodul-select") == class_list[0]:
             url = "http://127.0.0.1:8000/api/get_all"
-            response = requests.get(url).json()
+            response = requests.get(url,verify=False).json()
             response_json = json.loads(response)
             num = len(response_json)
         elif request.form.get("Qusmodul-select") != class_list[0]:
             url = "http://127.0.0.1:8000/api/get_random"
-            response = requests.get(url).json()
+            response = requests.get(url,verify=False).json()
             response_json = json.loads(response)
             num = len(response_json)
         else:
