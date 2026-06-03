@@ -4,6 +4,8 @@ from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
 
+returnnal()
+
 with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f:
     csvfile = csv.reader(f)
     csv_text = [row for row in csvfile]
