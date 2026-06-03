@@ -4,7 +4,9 @@ from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
 
-time=0
+global time
+
+time = 0
 
 if time==0:
     returnnal()
@@ -34,8 +36,8 @@ scheduler = APScheduler()
 
 @app.route('/',methods=["GET","POST"])
 def index():
+    global time
     class_list = ["All","50","25","10"]
-
     time += 1
     if time==1:
         scheduler.add_job(
