@@ -2,4 +2,5 @@ flask
 requests
 bs4
 pypdf
+flask_apscheduler
 gunicorn
