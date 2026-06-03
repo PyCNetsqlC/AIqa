@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request
-import csv,requests,json,random，copy
+import csv,requests,json,random,copy
 from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
