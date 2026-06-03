@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request
-import csv,requests,json,random,copy
+import csv,requests,json,random
 from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
@@ -53,20 +53,32 @@ def index():
 
     if request.method=="POST":
         if request.form.get("Qusmodul-select") == class_list[0]:
+'''
             url = "https://aiqa-1.onrender.com/api/get_all"
             response_json = requests.get(url,verify=False).json()
+'''
+            response_json = get_all()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[1]:
+'''
             url = "https://aiqa-1.onrender.com/api/get_random_50"
-            response_json = requests.get(url,verify=False).json()
+            response_json =  requests.get(url,verify=False).json()
+'''
+            response_json = randm_50()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[2]:
+'''
             url = "https://aiqa-1.onrender.com/api/get_random_25"
             response_json = requests.get(url,verify=False).json()
+'''
+            response_json = randm_25()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[3]:
+'''
             url = "https://aiqa-1.onrender.com/api/get_random_10"
             response_json = requests.get(url,verify=False).json()
+'''
+            response_json = randm_10()
             num = len(response_json)
         else:
             return render_template("index.html",class_list=class_list)
@@ -125,13 +137,12 @@ def testquestion():
 #all_qus
 @app.route('/api/get_all',methods=["GET"])
 def get_all():
-    get_csvdict = copy.deepcopy(csv_dict)
     all_data = []
-    for i in range(1,len([get_csvdict][0])+1):
-        [get_csvdict][0][i]["id"] = str(i)
-        all_data.append([get_csvdict][0][i])
-    json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return json_api
+    for i in range(1,len([csv_dict][0])+1):
+        ［csv_dict][0][i]["id"] = str(i)
+        all_data.append([csv_dict][0][i])
+    #json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
+    return all_data
 
 
 
@@ -153,8 +164,8 @@ def randm_10():
         random_qus.append(csv_dict[f])
         if len(random_num)==10:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return json_api
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return random_qus
 
 
 #random_qus_25
@@ -175,8 +186,8 @@ def randm_25():
         random_qus.append(csv_dict[f])
         if len(random_num)==25:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return json_api
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return random_qus
 
 
 #random_qus_50
@@ -197,8 +208,8 @@ def randm_50():
         random_qus.append(csv_dict[f])
         if len(random_num)==50:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return json_api
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return random_qus
 
 
 if __name__ == "__main__":
