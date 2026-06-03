@@ -13,7 +13,7 @@ def returnnal():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
 
-    response = requests.get(url_oragin, headers=headers, timeout=10.,verify=False)
+    response = requests.get(url_oragin, headers=headers, timeout=10,verify=False)
     response.raise_for_status()  # 檢查請求是否成功
     response.encoding = response.apparent_encoding
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -21,7 +21,6 @@ def returnnal():
     strfire = str(study_guidelines[-2]).lstrip("<script>elf.__next_f.push([1,").rstrip("</script>").split(",")
     study_url = [ i.lstrip('\\"url\\":\\').rstrip('\"\\') for i in strfire if ('\\"url\\":\\"' in i) and ("初級" in i) and ("試題" in i) ]
     #study_url = [ i.lstrip('\\"url\\":\\').rstrip('\"\\').replace(" ","%20") for i in strfire if ('\\"url\\":\\"' in i) and ("資訊安全" in i) and ("學習" not in i) ]
-
 
     #試題資料處理
     alldata = []

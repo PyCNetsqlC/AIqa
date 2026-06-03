@@ -1,9 +1,7 @@
 from flask import Flask, jsonify,render_template,request
 import csv,requests,json,random
-#from flask_apscheduler import APScheduler
+from flask_apscheduler import APScheduler
 from clawdatatodb import returnnal
-
-alldata = returnnal()
 
 with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f:
     csvfile = csv.reader(f)
@@ -21,7 +19,7 @@ with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f
 
 
 app = Flask(__name__)
-#scheduler = APScheduler()
+scheduler = APScheduler()
 '''mainpage'''
 
 @app.route('/',methods=["GET","POST"])
@@ -30,23 +28,19 @@ def index():
     if request.method=="POST":
         if request.form.get("Qusmodul-select") == class_list[0]:
             url = "https://aiqa-1.onrender.com/api/get_all"
-            response = requests.get(url,verify=False).json()
-            response_json = json.loads(response)
+            response_json = requests.get(url,verify=False).json()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[1]:
             url = "https://aiqa-1.onrender.com/api/get_random_50"
-            response = requests.get(url,verify=False).json()
-            response_json = json.loads(response)
+            response_json = requests.get(url,verify=False).json()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[2]:
             url = "https://aiqa-1.onrender.com/api/get_random_25"
-            response = requests.get(url,verify=False).json()
-            response_json = json.loads(response)
+            response_json = requests.get(url,verify=False).json()
             num = len(response_json)
         elif request.form.get("Qusmodul-select") == class_list[3]:
             url = "https://aiqa-1.onrender.com/api/get_random_10"
-            response = requests.get(url,verify=False).json()
-            response_json = json.loads(response)
+            response_json = requests.get(url,verify=False).json()
             num = len(response_json)
         else:
             return render_template("index.html",class_list=class_list)
@@ -111,7 +105,7 @@ def get_all():
         [csv_dict][0][i]["id"] = str(i)
         all_data.append([csv_dict][0][i])
     json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    return json_api
 
 
 #random_qus_10
@@ -122,7 +116,7 @@ def randm_10():
     random_num = set()
     random_qus = list()
     while n==0:
-        f = random.randint(1,len(alldata))
+        f = random.randint(1,len(csv_dict))
         if f not in random_num:
             random_num.add(f)
         elif f in random_num:
@@ -133,7 +127,7 @@ def randm_10():
         if len(random_num)==10:
             break
     json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    return json_api
 
 
 #random_qus_25
@@ -144,7 +138,7 @@ def randm_25():
     random_num = set()
     random_qus = list()
     while n==0:
-        f = random.randint(1,len(alldata))
+        f = random.randint(1,len(csv_dict))
         if f not in random_num:
             random_num.add(f)
         elif f in random_num:
@@ -155,7 +149,7 @@ def randm_25():
         if len(random_num)==25:
             break
     json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    return json_api
 
 
 #random_qus_50
@@ -166,7 +160,7 @@ def randm_50():
     random_num = set()
     random_qus = list()
     while n==0:
-        f = random.randint(1,len(alldata))
+        f = random.randint(1,len(csv_dict))
         if f not in random_num:
             random_num.add(f)
         elif f in random_num:
@@ -177,12 +171,12 @@ def randm_50():
         if len(random_num)==50:
             break
     json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    return json_api
 
 
 if __name__ == "__main__":
     # 設定定時排程（範例：每天台灣中午 12 點執行 = UTC 4 點）
-    '''scheduler.add_job(
+    scheduler.add_job(
         id='pdf_scraper_job', 
         func=returnnal, 
         trigger='cron', 
@@ -195,8 +189,8 @@ if __name__ == "__main__":
     scheduler.init_app(app)
     scheduler.start()
     print("🚀 背景排程器已成功啟動！")    
-    # 保留 debug=True，但必須手動關閉 reloader 機制
-    '''
+    # 保留 ebug=True，但必須手動關閉 reloader 機制
+    
     app.run(host='0.0.0.0',debug=True, use_reloader=False, port=8000)
 
 
