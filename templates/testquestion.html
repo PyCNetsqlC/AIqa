@@ -119,7 +119,7 @@
             <!-- 題目區 -->
             <div style="margin-bottom: 25px; text-align: left;">
                 <p style="font-weight: bold; font-size: 24px; color: #222; margin: 0; line-height: 1.5; text-align: left;">
-                    {{ loop.index }}. {{ item.question }}
+                    {{ item.id }}. {{ item.question }}
                 </p>
             </div>
             
@@ -129,32 +129,32 @@
                 <!-- 選項 A -->
                 <div style="width: 100%; font-size: 18px; text-align: left;">
                     <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
-                        <input type="radio" name="qus_{{ loop.index }}" value="A" class="quiz-radio quiz-option">
-                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_1 }}</span>
+                        <input type="radio" name="qus_{{ item.id }}" value="A" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_1.split('\n')[0].split('\r')[0].split(' A.')[0].split(' B.')[0].split(' C.')[0].split(' D.')[0].split(' (')[0] }}</span>
                     </label>
                 </div>
-                
+            
                 <!-- 選項 B -->
                 <div style="width: 100%; font-size: 18px; text-align: left;">
                     <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
-                        <input type="radio" name="qus_{{ loop.index }}" value="B" class="quiz-radio quiz-option">
-                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_2 }}</span>
+                        <input type="radio" name="qus_{{ item.id }}" value="B" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_2.split('\n')[0].split('\r')[0].split(' A.')[0].split(' B.')[0].split(' C.')[0].split(' D.')[0].split(' (')[0]  }}</span>
                     </label>
                 </div>
                 
                 <!-- 選項 C -->
                 <div style="width: 100%; font-size: 18px; text-align: left;">
                     <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
-                        <input type="radio" name="qus_{{ loop.index }}" value="C" class="quiz-radio quiz-option">
-                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_3 }}</span>
+                        <input type="radio" name="qus_{{ item.id }}" value="C" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_3.split('\n')[0].split('\r')[0].split(' A.')[0].split(' B.')[0].split(' C.')[0].split(' D.')[0].split(' (')[0]  }}</span>
                     </label>
                 </div>
                 
                 <!-- 選項 D -->
                 <div style="width: 100%; font-size: 18px; text-align: left;">
                     <label style="cursor: pointer; display: inline-flex; align-items: center; padding: 10px; margin: 0; text-align: left; width: 100%; border-radius: 6px;">
-                        <input type="radio" name="qus_{{ loop.index }}" value="D" class="quiz-radio quiz-option">
-                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_4}}</span>
+                        <input type="radio" name="qus_{{ item.id }}" value="D" class="quiz-radio quiz-option">
+                        <span style="line-height: 1.5; color: #333; padding-left: 2ch; text-align: left;">{{ item.options_4.split('\n')[0].split('\r')[0].split(' A.')[0].split(' B.')[0].split(' C.')[0].split(' D.')[0].split(' (')[0] }}</span>
                     </label>
                 </div>
                 
