@@ -123,7 +123,7 @@ def testquestion():
 def get_all():
     all_data = []
     for i in range(1,len([csv_dict][0])+1):
-        ［csv_dict][0][i]["id"] = str(i)
+        [csv_dict][0][i]["id"] = str(i)
         all_data.append([csv_dict][0][i])
     #json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
     return all_data
