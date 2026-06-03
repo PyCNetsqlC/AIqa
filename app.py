@@ -52,35 +52,15 @@ def index():
         print(f"資料庫資料更新中,time:{time}")
 
     if request.method=="POST":
-'''        if request.form.get("Qusmodul-select") == class_list[0]:
-
-            url = "https://aiqa-1.onrender.com/api/get_all"
-            response_json = requests.get(url,verify=False).json()
-'''
         if request.form.get("Qusmodul-select") == class_list[0]:
             response_json = get_all()
             num = len(response_json)
-'''        elif request.form.get("Qusmodul-select") == class_list[1]:
-
-            url = "https://aiqa-1.onrender.com/api/get_random_50"
-            response_json =  requests.get(url,verify=False).json()
-'''
         elif request.form.get("Qusmodul-select") == class_list[1]:
             response_json = randm_50()
             num = len(response_json)
-'''        elif request.form.get("Qusmodul-select") == class_list[2]:
-
-            url = "https://aiqa-1.onrender.com/api/get_random_25"
-            response_json = requests.get(url,verify=False).json()
-'''
         elif request.form.get("Qusmodul-select") == class_list[2]:
             response_json = randm_25()
             num = len(response_json)
-'''        elif request.form.get("Qusmodul-select") == class_list[3]:
-
-            url = "https://aiqa-1.onrender.com/api/get_random_10"
-            response_json = requests.get(url,verify=False).json()
-'''
         elif request.form.get("Qusmodul-select") == class_list[3]:
             response_json = randm_10()
             num = len(response_json)
