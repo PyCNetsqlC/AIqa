@@ -8,7 +8,7 @@ time=0
 
 if time==0:
     returnnal()
-    print(f"資料庫資料更新中,time:{time}"）
+    print(f"資料庫資料更新中,time:{time}")
 
 with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f:
     csvfile = csv.reader(f)
