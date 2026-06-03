@@ -28,7 +28,6 @@ app = Flask(__name__)
 def index():
     class_list = ["All","50","25","10"]
     if request.method=="POST":
-        x = request.form.get("Qusmodul-select")
         if request.form.get("Qusmodul-select") == class_list[0]:
             url = "https://aiqa-1.onrender.com/api/get_all"
             response = requests.get(url,verify=False).json()
@@ -111,8 +110,8 @@ def get_all():
     for i in range(1,len([csv_dict][0])+1):
         [csv_dict][0][i]["id"] = str(i)
         all_data.append([csv_dict][0][i])
-    json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    #json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
+    return jsonify(all_data)
 
 
 #random_qus_10
@@ -133,8 +132,8 @@ def randm_10():
         random_qus.append(csv_dict[f])
         if len(random_num)==10:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(random_qus)
 
 
 #random_qus_25
@@ -155,8 +154,8 @@ def randm_25():
         random_qus.append(csv_dict[f])
         if len(random_num)==25:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(random_qus)
 
 
 #random_qus_50
@@ -177,15 +176,11 @@ def randm_50():
         random_qus.append(csv_dict[f])
         if len(random_num)==50:
             break
-    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
-    return jsonify(json_api)
-
+    #json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(random_qus)
 
 
 if __name__ == "__main__":
-
-
-
     # 設定定時排程（範例：每天台灣中午 12 點執行 = UTC 4 點）
     '''scheduler.add_job(
         id='pdf_scraper_job', 
