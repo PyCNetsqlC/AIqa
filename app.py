@@ -1,4 +1,4 @@
-from flask import Flask, jsonify,render_template,request
+from flask import Flask, render_template,request
 import csv,requests,json,random
 from flask_apscheduler import APScheduler
 from datetime import datetime  
