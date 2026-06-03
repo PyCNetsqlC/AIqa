@@ -4,8 +4,6 @@ from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
 
-returnnal()
-
 with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f:
     csvfile = csv.reader(f)
     csv_text = [row for row in csvfile]
@@ -25,15 +23,6 @@ with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f
 app = Flask(__name__)
 scheduler = APScheduler()
 
-scheduler.add_job(
-    id='startup_update_job',
-    func=returnnal,
-    trigger='date',
-    run_date=datetime.now(),
-)
-
-scheduler.init_app(app)
-scheduler.start()
 
 '''mainpage'''
 
@@ -41,6 +30,15 @@ scheduler.start()
 def index():
     class_list = ["All","50","25","10"]
     if request.method=="POST":
+        scheduler.add_job(
+            id='startup_update_job',
+            func=returnnal,
+            trigger='date',
+            run_date=datetime.now(),
+            )
+
+        scheduler.init_app(app)
+        scheduler.start()
         if request.form.get("Qusmodul-select") == class_list[0]:
             url = "https://aiqa-1.onrender.com/api/get_all"
             response_json = requests.get(url,verify=False).json()
