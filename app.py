@@ -21,12 +21,10 @@ with open("./db_file/clean.csv", mode="r", encoding="utf-8-sig",newline="") as f
 
 
 app = Flask(__name__)
-x = None
 '''mainpage'''
 
 @app.route('/',methods=["GET","POST"])
 def index():
-    global x
     class_list = ["All","50","25","10"]
     if request.method=="POST":
         x = request.form.get("Qusmodul-select")
@@ -35,8 +33,18 @@ def index():
             response = requests.get(url,verify=False).json()
             response_json = json.loads(response)
             num = len(response_json)
-        elif request.form.get("Qusmodul-select") != class_list[0]:
-            url = "https://aiqa-1.onrender.com/api/get_random"
+        elif request.form.get("Qusmodul-select") == class_list[1]:
+            url = "https://aiqa-1.onrender.com/api/get_random_50"
+            response = requests.get(url,verify=False).json()
+            response_json = json.loads(response)
+            num = len(response_json)
+        elif request.form.get("Qusmodul-select") == class_list[2]:
+            url = "https://aiqa-1.onrender.com/api/get_random_25"
+            response = requests.get(url,verify=False).json()
+            response_json = json.loads(response)
+            num = len(response_json)
+        elif request.form.get("Qusmodul-select") == class_list[3]:
+            url = "https://aiqa-1.onrender.com/api/get_random_10"
             response = requests.get(url,verify=False).json()
             response_json = json.loads(response)
             num = len(response_json)
@@ -109,6 +117,29 @@ def get_all():
     json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
     return jsonify(json_api)
 
+
+#random_qus_10
+@app.route('/api/get_random_10',methods=["GET"])
+def randm_10():
+    n = 0
+    i=0
+    random_num = set()
+    random_qus = list()
+    while n==0:
+        f = random.randint(1,len(alldata))
+        if f not in random_num:
+            random_num.add(f)
+        elif f in random_num:
+            continue
+        i+=1
+        csv_dict[f]["id"] = str(i)
+        random_qus.append(csv_dict[f])
+        if len(random_num)==10:
+            break
+    json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
+    return jsonify(json_api)
+
+
 #random_qus_25
 @app.route('/api/get_random_25',methods=["GET"])
 def randm_25():
@@ -132,8 +163,8 @@ def randm_25():
 
 
 #random_qus_50
-@app.route('/api/get_random',methods=["GET"])
-def randm():
+@app.route('/api/get_random_50',methods=["GET"])
+def randm_50():
     n = 0
     i=0
     random_num = set()
@@ -147,7 +178,7 @@ def randm():
         i+=1
         csv_dict[f]["id"] = str(i)
         random_qus.append(csv_dict[f])
-        if len(random_num)==int(x):
+        if len(random_num)==50:
             break
     json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
     return jsonify(json_api)
