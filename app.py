@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request
-import csv,requests,json,random
+import csv,requests,json,random，copy
 from flask_apscheduler import APScheduler
 from datetime import datetime  
 from clawdatatodb import returnnal
@@ -125,12 +125,14 @@ def testquestion():
 #all_qus
 @app.route('/api/get_all',methods=["GET"])
 def get_all():
+    get_csvdict = copy.deepcopy(csv_dict)
     all_data = []
-    for i in range(1,len([csv_dict][0])+1):
-        [csv_dict][0][i]["id"] = str(i)
-        all_data.append([csv_dict][0][i])
+    for i in range(1,len([get_csvdict][0])+1):
+        [get_csvdict][0][i]["id"] = str(i)
+        all_data.append([get_csvdict][0][i])
     json_api = json.dumps(all_data, ensure_ascii=True, indent=4)
-    return json_api
+    return Response(json_api, mimetype='application/json')
+
 
 
 #random_qus_10
