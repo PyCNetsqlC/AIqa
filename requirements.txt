@@ -1,7 +1,8 @@
-flask
-requests
-bs4
-pypdf
-flask_apscheduler
-datetime
+flask==3.1.0
+requests==2.32.4
+bs4==0.0.2
+pypdf==3.1.0
+flask_apscheduler==1.13.1
+datetime==4.7
+python-dotenv==0.21.0
 gunicorn

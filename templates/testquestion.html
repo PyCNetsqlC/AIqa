@@ -114,7 +114,7 @@
         <div class="question-card {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}">
             
             <!-- 隱藏的正確答案框格 -->
-            <input type="hidden" name="ans_{{ loop.index }}" value="{{ item.correct_answer }}">
+            <input type="hidden" name="ans_{{ item.id }}" value="{{ item.correct_answer }}">
 
             <!-- 題目區 -->
             <div style="margin-bottom: 25px; text-align: left;">

@@ -1,14 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
-import io,re,os,csv
+import io,re,csv
 
-
-def returnnal():
+def returnnal(mainurl:str,DB:str):
     #爬蟲主網頁
-    url_oragin = "https://ipd.nat.gov.tw/ipas/certification/AIAP/learning-resources"
-    #url_oragin = "https://ipd.nat.gov.tw/ipas/certification/ISE/learning-resources"
-
+    url_oragin = mainurl
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -128,12 +125,10 @@ def returnnal():
 
 
     #db_csvfile
-    os.chdir(r"./db_file")
-    with open('clean.csv', mode='w+', encoding='utf-8-sig', newline='') as file:
+    with open(DB, mode='w+', encoding='utf-8-sig', newline='') as file:
         writer = csv.writer(file)
         # 一次寫入多行資料
         writer.writerow(["id","question","options_1","options_2","options_3","options_4","correct_answer"])
         writer.writerows(alldata)
-        os.chdir(r"..")
 
     return alldata

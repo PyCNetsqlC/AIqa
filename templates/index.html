@@ -16,20 +16,21 @@
         }
         .login-container {
             background: white;
-            padding: 20px;
+            width: 100%;
+            padding: 40px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
         }
         input {
-            width: 75%;
-            padding: 10px;
+            width: 100%;
+            padding: 40px;
             margin: 8px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
-            width: 60%;
+            width: 75%;
             padding: 5px;
             background-color: #28a745;
             color: white;
@@ -41,8 +42,22 @@
             background-color: #218838;
         }
         select {
-            width: 60%;
+            width: 75%;
             padding: 5px;
+        }
+        a{
+            width: 75%;
+            padding: 10px;
+            color: burlywood;
+            text-align: center;
+            font-size: medium;
+        }
+        .namu{
+            width: 75%;
+            padding: 10px;
+            color: whitesmoke;
+            text-align: center;
+            font-size: x-small;
         }
     </style>
 </head>
@@ -50,7 +65,7 @@
 
 <div class="login-container">
     <h2>題數選擇</h2>
-    <form action="/" method="POST">
+    <form action="/index.html" method="POST">
         <select class="Qus" name="Qusmodul-select" required>
             <option disabled="disabled" selected="selected" value>-- 請選擇答題方式 --</option>
             {% for item in class_list %}
@@ -62,6 +77,9 @@
     </form>
 <br>
 <a href="https://ipas.tw/"> Learn More Welcome To This Page </a>
+<br>
+<br>
+<a class="namu">總訪問人次: {{ time }} </a>
 </div>
 </body>
 </html>
