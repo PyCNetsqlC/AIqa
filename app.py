@@ -137,7 +137,7 @@ def index_get():
 
 
 
-@app.route('/index.html',methods=["POST"])
+@app.route('/testquestion.html',methods=["GET","POST"])
 def index_post():
     global time
     class_list = ["All","50","25","10"] #首頁列表選單
@@ -157,19 +157,14 @@ def index_post():
         else:
             return render_template("index.html",class_list=class_list,time=time)
         return render_template("testquestion.html",num=num,response_json=response_json)
-    return render_template("index.html",class_list=class_list,time=time)
+    return """<h1>    !!! 檢測到異常操作  !!!<br>!!!  請回首頁進行正常操作 !!! </h1>"""
 
 
 
-
-
-
-
-@app.route("/testquestion.html", methods=["GET", "POST"])
-def testquestion():
-    sorce = 0  # 你的總分變數
-
+@app.route("/result.html", methods=["GET","POST"])
+def result():
     if request.method == "POST":
+        sorce = 0  # 你的總分變數
         num = request.form.get("number")
         avgcen = 100 / int(num)
         # 💡 新增：用來統計數量與收集錯題的變數
@@ -203,9 +198,7 @@ def testquestion():
             wrong_records=wrong_records,  # 錯題名單
             wrong_len = len(wrong_records),
         )
-
-    # 💡 提示：這裡記得放你原本 GET 請求時的抽題與 return 邏輯
-    # return render_template("testquestion.html", num=..., response_json=...)
+    return """<h1>    !!! 尚未進行作答  !!!<br>!!!  請回首頁進行測試 !!! </h1>"""
 
 
 
