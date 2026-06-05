@@ -174,6 +174,7 @@ def result():
             tyy = request.form.get(f"qus_{i}")  # 使用者選的答案
             cta = request.form.get(f"ans_{i}")   #前端隱藏的正確答案
             #cta = request.form.get(f"ans_{i}")   後端的正確答案  *// 太麻煩了不想用! 本來就是設計成刷題用的方便就好! 我超懶~ :)
+            wrong_qus = request.form.get(f"wrong_qus_{i}")
 
             # 進行數值驗證
             if tyy == cta:
@@ -183,7 +184,7 @@ def result():
                 wrong_count += 1  # 答錯加 1 題
                 # 💡 核心新增：只要答錯，就把這題的編號、作答、正解記下來
                 wrong_records.append(
-                    {"id": i, "your_ans": tyy, "correct_ans": cta}
+                    {"id": i, "wrong_qus": wrong_qus, "your_ans": tyy[0], "correct_ans": cta}
                 )
 
         # 💡 核心修正：計算完畢後，將所有數據 return 給 result.html 網頁
