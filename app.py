@@ -217,6 +217,8 @@ def get_all():
 #random_qus 試配總試題數內的任意整數(不含0)，不可以單獨調用
 @app.route('/api/get_random',methods=["GET"])
 def randm():
+    global return_ob
+    _return_ob = return_ob
     n = 0
     i=0
     random_num = set()
@@ -230,7 +232,7 @@ def randm():
         i+=1
         csv_dict[f]["id"] = str(i)
         random_qus.append(csv_dict[f])
-        if len(random_num)==int(return_ob):
+        if len(random_num)==int(_return_ob):
             break
     json_api = json.dumps(random_qus, ensure_ascii=True, indent=4)
     return json_api
