@@ -5,7 +5,6 @@ from flask_apscheduler import APScheduler
 from clawdatatodb import returnnal
 
 global time
-global return_ob
 global csv_dict
 
 load_dotenv()
@@ -143,7 +142,6 @@ def index_post():
     class_list = ["All","50","25","10"] #首頁列表選單
     # 首頁前端回傳區塊
     if request.method=="POST": 
-        global return_ob   
         return_ob = request.form.get("Qusmodul-select")
         #題目問答區塊
         if return_ob == class_list[0]:
@@ -151,7 +149,7 @@ def index_post():
             response_json = requests.get(url,verify=True).json()
             num = len(response_json)
         elif return_ob != class_list[0]:
-            url = os.environ.get("API_TWO")
+            url = os.environ.get("API_TWO")+f"?limit={return_ob}"
             response_json = requests.get(url,verify=True).json()
             num = len(response_json)
         else:
@@ -217,8 +215,7 @@ def get_all():
 #random_qus 試配總試題數內的任意整數(不含0)，不可以單獨調用
 @app.route('/api/get_random',methods=["GET"])
 def randm():
-    global return_ob
-    _return_ob = return_ob
+    _return_ob = request.args.get('limit')
     n = 0
     i=0
     random_num = set()
