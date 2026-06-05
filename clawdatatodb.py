@@ -37,7 +37,7 @@ def returnnal(mainurl:str,DB:str):
                 sa = reader.pages[i].extract_text().split("\n")
                 del(sa[0:4])
                 for j in sa:
-                    cc += j     
+                    cc += j   
 
             #correct_answer
             for match in re.compile(r"([A-DＡ-Ｄ])\s+(\d+)\.").finditer(cc):
@@ -49,80 +49,34 @@ def returnnal(mainurl:str,DB:str):
             if len(correct_answer) != 50 :
                 print(f"選項數目不對，出錯容器: correct_answer")
 
-                
-            #qus
-            for j in range(len(cc)):
-                if re.match(r"[1-5][0-9]\. ", cc[j:j+4]):
-                    for k in range(j,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == "？" or cc[k] == "?":
-                            qus.append(vv)
-                            vv = ""
-                            break
-                    if cc[j]=="5" and cc[j+1]=="0" and cc[j+2]==".":
-                        break
-                elif re.match(r" [0-9]\. ", cc[j:j+4]):
-                    for k in range(j,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == "？" or  cc[k] == "?":
-                            qus.append(vv)
-                            vv = ""
-                            break
-            for _ in range(len(qus) - 1, -1, -1):
-                if "(A)" in qus[_] or "(B)" in qus[_] or "(C)" in qus[_] or "(D)" in qus[_]:
-                    qus.remove(qus[_])
-            for q in range(len(qus)):
-                qus[q] = re.sub(r'\d+\.', '', qus[q])
+            # qus & ans
+            cc = cc.replace("\n","")
+            cc = cc.replace(" ","")
+            cc = cc.replace("答案題目","")
+            for i in range(len(correct_answer)):
+                x = correct_answer[i][1]+correct_answer[i][0]+"."
+                cc = cc.replace(x,"*")
+            cc = cc.replace("(A)","\n~")
+            cc = cc.replace("(B)","\n~")
+            cc = cc.replace("(C)","\n~")
+            cc = cc.replace("(D)","\n~")
+            cc = cc.split("*")
+            del(cc[0])
+            for i in cc:
+                x = i.split("\n")
+                qus.append(x[0].replace("？","？\n").replace("。","。\n"))
+                ans.append([x[1].replace("~","A. "),x[2].replace("~","B. "),x[3].replace("~","C. "),x[4].replace("~","D. ")])
             if len(qus) != len(correct_answer) :
-                print(f"問題數目不對，出錯容器: qus")
-
-
-            #ans
-            for an in range(len(cc)):
-                if cc[an] == "("  and cc[an+1] == "A":
-                    for k in range(an,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == "；" and cc[k+1] == " " and cc[k+2] == "(":
-                            ans.append(vv)
-                            vv = ""
-                            break
-                if cc[an] == "("  and cc[an+1] == "B":
-                    for k in range(an,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == "；" and cc[k+1] == " " and cc[k+2] == "(":
-                            ans.append(vv)
-                            vv = ""
-                            break
-                if cc[an] == "("  and cc[an+1] == "C":
-                    for k in range(an,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == "；" and cc[k+1] == " " and cc[k+2] == "(":
-                            ans.append(vv)
-                            vv = ""
-                            break
-                if cc[an]=="(" and cc[an+1] == "D":
-                    for k in range(an,len(cc)):
-                        vv += cc[k]
-                        if cc[k] == " " and cc[k+1] == " ":
-                            ans.append(vv)
-                            vv = ""
-                            break
-            for _ in range(len(ans) - 1, -1, -1):
-                if re.search(r"[？?]", ans[_]) and not re.search(r"[；;DＤ]", ans[_]):
-                    ans.remove(ans[_])
-                ans[_] = re.sub(r'\s*[A-D]\s+(?:[1-4]\d|50|[1-9])\.\s*$', '', ans[_])
-            anst = [ ans[i:i+4] for i in range(len(ans)) if i%4==0]
-            if len(anst) != len(qus) :
+                    print(f"問題數目不對，出錯容器: qus")
+            if len(ans) != len(qus) :
                 print(f"選項數目不對，出錯容器: anst")
-            
-            
-    #alldata
+
+                #alldata
             for i in range(len(qus)):
-                alldata.append([qus[i].replace(" ",""),anst[i][0],anst[i][1],anst[i][2],anst[i][3],correct_answer[i][1]])
+                alldata.append([qus[i].replace(" ",""),ans[i][0],ans[i][1],ans[i][2],ans[i][3],correct_answer[i][1]])
     for h in range(len(alldata)):
         alldata[h].append(f"{h+1}")
         alldata[h] = [alldata[h][len(alldata[h])-1]]+alldata[h][:len(alldata[h])-1]
-
 
     #db_csvfile
     with open(DB, mode='w+', encoding='utf-8-sig', newline='') as file:
