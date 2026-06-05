@@ -184,7 +184,7 @@ def result():
                 wrong_count += 1  # 答錯加 1 題
                 # 💡 核心新增：只要答錯，就把這題的編號、作答、正解記下來
                 wrong_records.append(
-                    {"id": i, "wrong_qus": wrong_qus, "your_ans": tyy[0], "correct_ans": cta}
+                    {"id": i, "wrong_qus": wrong_qus, "your_ans": tyy, "correct_ans": cta}
                 )
 
         # 💡 核心修正：計算完畢後，將所有數據 return 給 result.html 網頁
