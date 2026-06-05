@@ -212,7 +212,7 @@ def get_all():
     return json_api
 
 
-#random_qus 試配總試題數內的任意整數(不含0)，不可以單獨調用
+#random_qus 試配總試題數內的任意整數(不含0)，可單獨調用須輸入數字回傳參數
 @app.route('/api/get_random',methods=["GET"])
 def randm():
     _return_ob = request.args.get('return_ob')

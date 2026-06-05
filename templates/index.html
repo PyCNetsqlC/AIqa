@@ -1,63 +1,108 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI應用規劃師初級歷屆考題</title>
+    <title>AI應用規劃師初級歷屆測驗</title>
     <style>
+        /* 基礎全域設定，確保內距計算正確 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Helvetica Neue", Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
+            min-height: 100vh;
+            background-color: #f4f7f6; /* 改用更飽滿的微偏綠灰底 */
         }
+
+        /* 調整容器：寬度固定在後台常見的RWD舒適寬度 */
         .login-container {
             background: white;
             width: 100%;
-            padding: 40px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            max-width: 480px; /* 限制最大寬度，避免在電腦版無限拉長 */
+            margin: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* 更柔和的現代陰影 */
+            border-radius: 10px;
             text-align: center;
         }
-        input {
-            width: 100%;
-            padding: 40px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+        h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+            letter-spacing: 1px;
         }
+
+        /* 按鍵：修改表單內的所有主要元件「寬度一律 100% 寬度」 */
+        select, button {
+            width: 100%;
+            padding: 12px; /* 舒適且符合現代網頁標準的內距 */
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease; /* 增加平滑過渡動畫 */
+        }
+
+        /* 下拉選單樣式最佳化 */
+        select {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #495057;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        /* 按鈕樣式最佳化 */
         button {
-            width: 75%;
-            padding: 5px;
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
         }
+
         button:hover {
             background-color: #218838;
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            transform: translateY(-1px); /* 懸浮時微微浮起 */
         }
-        select {
-            width: 75%;
-            padding: 5px;
+
+        /* 調整連結與頁尾資訊的寬度與顏色 */
+        a {
+            display: inline-block;
+            width: 100%;
+            margin-top: 20px;
+            color: #bfa37a; /* 稍微加深 burlywood 提高易讀性 */
+            text-decoration: none;
+            font-size: 14px;
         }
-        a{
-            width: 75%;
-            padding: 10px;
-            color: burlywood;
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 總訪問人次樣式最佳化 */
+        .namu {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            color: #888888; /* 從純白改成舒適的灰色 */
             text-align: center;
-            font-size: medium;
-        }
-        .namu{
-            width: 75%;
-            padding: 10px;
-            color: whitesmoke;
-            text-align: center;
-            font-size: x-small;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -67,19 +112,19 @@
     <h2>題數選擇</h2>
     <form action="/testquestion.html" method="POST">
         <select class="Qus" name="Qusmodul-select" required>
-            <option disabled="disabled" selected="selected" value>-- 請選擇答題方式 --</option>
+            <option disabled selected value="">--請選擇答題方式--</option>
+            <!-- 這裡保留了後端模板語法，請確保您有透過 Python 傳遞 class_list 資料 -->
             {% for item in class_list %}
                 <option value="{{ item }}">{{ item }}</option>
             {% endfor %}
         </select>
-        <br><br>
-        <button type="submit">送出</button>
+        <button type="submit">發送</button>
     </form>
-<br>
-<a href="https://ipas.tw/"> Learn More Welcome To This Page </a>
-<br>
-<br>
-<a class="namu">總訪問人次: {{ time }} </a>
+
+    <a href="https://ipas.tw/">想學習更多歡迎造訪此頁面</a>
+    <!-- 這裡保留了後端模板語法，請確保您有透過 Python 傳遞 time 資料 -->
+    <span class="namu">總訪問人數：{{ time }} </span>
 </div>
+
 </body>
 </html>
