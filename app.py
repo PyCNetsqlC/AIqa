@@ -177,7 +177,7 @@ def result():
             wrong_qus = request.form.get(f"wrong_qus_{i}")
 
             # 進行數值驗證
-            if tyy[0] == cta[0]:
+            if tyy[0] == cta:
                 sorce += avgcen
                 correct_count += 1  # 答對加 1 題
             else:
