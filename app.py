@@ -199,6 +199,9 @@ def result():
         )
     return """<h1>    !!! 尚未進行作答  !!!<br>!!!  請回首頁進行測試 !!! </h1>"""
 
+@app.route('/loaderio-be4fbf89bc160a080817c70bae94c7f0/')
+def loaderio_verify():
+    return "loaderio-be4fbf89bc160a080817c70bae94c7f0"
 
 
 '''API'''
