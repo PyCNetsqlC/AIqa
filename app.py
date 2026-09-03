@@ -80,7 +80,7 @@ scheduler.start()
 
 '''mainpage'''
 
-@app.route('/',methods=["GET"])
+@app.route('/',methods=["GET","POST"])
 def index_get():
     global time
 
@@ -199,6 +199,7 @@ def result():
         )
     return """<h1>    !!! 尚未進行作答  !!!<br>!!!  請回首頁進行測試 !!! </h1>"""
 
+#test app loaderio need code
 @app.route('/loaderio-be4fbf89bc160a080817c70bae94c7f0/')
 def loaderio_verify():
     return "loaderio-be4fbf89bc160a080817c70bae94c7f0"
