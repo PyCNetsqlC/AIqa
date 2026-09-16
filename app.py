@@ -138,7 +138,7 @@ def index_get():
 def index_post():
     class_list = ["All","50","25","10"] #首頁列表選單
     # 首頁前端回傳區塊
-    if request.method=="GET": 
+    if request.method=="POST": 
         return_ob = request.form.get("Qusmodul-select")
         #題目問答區塊
         if return_ob == class_list[0]:
