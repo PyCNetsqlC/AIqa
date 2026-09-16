@@ -148,7 +148,7 @@ def index_post():
             num = len(response_json)
         else:
             return render_template("index.html",class_list=class_list,time=time)
-        return render_template("testquestion.html",num=num,response_json=response_json)
+        return render_template("testquestion_3.html",num=num,response_json=response_json)
     return """<h1>    !!! 檢測到異常操作  !!!<br>!!!  請回首頁進行正常操作 !!! </h1>"""
 
 
