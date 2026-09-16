@@ -131,7 +131,7 @@ def index_get():
 
 
 
-@app.route('/testquestion.html',methods=["GET","POST"])
+@app.route('/testquestion_3.html',methods=["GET","POST"])
 def index_post():
     class_list = ["All","50","25","10"] #首頁列表選單
     # 首頁前端回傳區塊
