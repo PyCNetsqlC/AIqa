@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask_apscheduler import APScheduler
 from clawdatatodb import returnnal
 
-global time
+global time,reload_job_times
 global csv_dict
 
 load_dotenv()
@@ -34,6 +34,9 @@ def db_reload(DB):
 
 #網頁每次重啟後
 time = 0 
+reload_job_times = 0
+csv_dict = None
+
 if time==0: #system loading.....
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
@@ -67,13 +70,25 @@ if time==0: #system loading.....
                 f"[AllDBCorruptionError] 主要與備用資料庫皆已毀損或無法讀取！"
                 f"原始錯誤: {backup_error}"
             )
-    print(f"資料庫資料初始更新中,time:{time}")
+    print(f"資料庫資料初始更新中,times應該要是零:{time}")
     
 
 
 app = Flask(__name__)
-
 scheduler = APScheduler()
+
+
+# 每天早上 24:30 固定執行
+@scheduler.task('cron', id='reload_job', hour=0, minute=30)
+def reload_job():
+    mainurl = os.environ.get("MAIN_URL")
+    DB = os.environ.get("DB")
+    returnnal(mainurl,DB)
+    csv_dict = db_reload(DB)
+    reload_job_times += 1
+    print(f"定時更新次數:{reload_job_times}")
+
+
 scheduler.init_app(app)
 scheduler.start()
 
@@ -82,63 +97,14 @@ scheduler.start()
 
 @app.route('/',methods=["GET","POST"])
 def index_get():
-    global time
-
     time += 1 #訪問次數
     class_list = ["All","50","25","10"] #首頁列表選單
-
-    mainurl = os.environ.get("MAIN_URL")
-    DB = os.environ.get("DB")
-    DB_2 = os.environ.get("DB_2")
-
-    #定時任務
-    existing_job = scheduler.get_job('daily_update_job')#檢查背景是否已經有這個排程任務
-    existing_job_2 = scheduler.get_job('monthly_update_job')#檢查背景是否已經有這個排程任務
-    try:
-        if not existing_job:
-            scheduler.add_job(            # 系統資料庫資料重載入
-                id='daily_update_job',    # 建議更改 ID 以符合「天天執行」的語意
-                func=db_reload,
-                args=[DB],
-                trigger='cron',           # 使用 cron 模式
-                hour=0,                   # 12 點
-                minute=30,                # 300 分
-                timezone='Asia/Taipei',   # 強烈建議：鎖定台灣時間早上 10 點
-                misfire_grace_time=3600,  # 錯過時間 1 小時內重新開機都會自動補做
-                )
-    except Exception as e:
-        if not existing_job:
-            scheduler.add_job(            # 系統資料庫資料重載入
-                id='daily_update_job',    # 建議更改 ID 以符合「天天執行」的語意
-                func=db_reload,
-                args=[DB_2],
-                trigger='cron',           # 使用 cron 模式
-                hour=0,                   # 12 點
-                minute=30,                # 300 分
-                timezone='Asia/Taipei',   # 強烈建議：鎖定台灣時間早上 10 點
-                misfire_grace_time=3600,  # 錯過時間 1 小時內重新開機都會自動補做
-                )
-            
-    if not existing_job_2:            # 如果找不到任務，才重新註冊它
-        scheduler.add_job(            # 資料庫更新任務
-            id='monthly_update_job',  # 建議更改 ID 以符合新任務語意
-            func=returnnal,
-            args=[mainurl,DB],
-            trigger='cron',           # 改為 cron 模式
-            day=1,                    # 每個月的 1 號
-            hour=23,                  # 23 點
-            minute=0,                 # 00 分
-            timezone='Asia/Taipei',   # 台北時間        
-            misfire_grace_time=3600   # 選擇性加入：若伺服器重啟錯過時間，一小時內自動補執行
-        )
-    print(f"資料庫資料更新中,time:{time}")
     return render_template("index.html",class_list=class_list,time=time)
 
 
 
 @app.route('/testquestion.html',methods=["GET","POST"])
 def index_post():
-    global time
     class_list = ["All","50","25","10"] #首頁列表選單
     # 首頁前端回傳區塊
     if request.method=="POST": 
