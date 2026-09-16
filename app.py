@@ -127,15 +127,18 @@ def index_get():
     global time
     time += 1 #訪問次數
     class_list = ["All","50","25","10"] #首頁列表選單
+    if request.method=="POST": 
+        return render_template("testquestion_3.html")
+    
     return render_template("index.html",class_list=class_list,time=time)
 
 
-#
+
 @app.route('/testquestion_3.html',methods=["GET","POST"])
 def index_post():
     class_list = ["All","50","25","10"] #首頁列表選單
     # 首頁前端回傳區塊
-    if request.method=="POST": 
+    if request.method=="GET": 
         return_ob = request.form.get("Qusmodul-select")
         #題目問答區塊
         if return_ob == class_list[0]:
