@@ -81,10 +81,37 @@ scheduler = APScheduler()
 # 每天早上 24:30 固定執行
 @scheduler.task('cron', id='reload_job', hour=0, minute=30)
 def reload_job():
+    global reload_job_times,csv_dict
+
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
     returnnal(mainurl,DB)
-    csv_dict = db_reload(DB)
+    try:
+        # 1. 嘗試讀取主要資料庫
+        csv_dict = db_reload(DB)
+        if len(csv_dict) == 0:
+            returnnal(mainurl, DB)
+            csv_dict = db_reload(DB)
+            if len(csv_dict) == 0:
+                csv_dict = db_reload(DB_2)
+                raise ValueError("主資料庫內容為空，啟用備用資料庫")
+    except Exception as e:
+        # 2. 主要資料庫出事了（打不開或損壞），進入備用機制
+        print(f" 主要資料庫異常，改讀備用檔案... 詳細原因: {e}")
+        try:
+            csv_dict = db_reload(DB_2)
+            if len(csv_dict) == 0:
+                # 💡 備用資料庫是空的，直接拋出內建錯誤並帶上你的標籤
+                raise ValueError("[AllDBCorruptionError] 主要資料庫損壞，且備用資料庫內容為空或內容資料格式錯誤！")
+        except FileNotFoundError:
+            raise ValueError("[AllDBCorruptionError] 主要資料庫損壞，且備用資料庫不存在！")
+        except Exception as backup_error:
+            # 🎯 3. 當連備用資料庫也打不開或損壞時，直接拋出致命錯誤
+            # 這樣日誌就會印出：RuntimeError: [AllDBCorruptionError] ...
+            raise RuntimeError(
+                f"[AllDBCorruptionError] 主要與備用資料庫皆已毀損或無法讀取！"
+                f"原始錯誤: {backup_error}"
+            )
     reload_job_times += 1
     print(f"定時更新次數:{reload_job_times}")
 
@@ -97,6 +124,7 @@ scheduler.start()
 
 @app.route('/',methods=["GET","POST"])
 def index_get():
+    global time
     time += 1 #訪問次數
     class_list = ["All","50","25","10"] #首頁列表選單
     return render_template("index.html",class_list=class_list,time=time)
