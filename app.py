@@ -130,7 +130,7 @@ def index_get():
     return render_template("index.html",class_list=class_list,time=time)
 
 
-
+#
 @app.route('/testquestion_3.html',methods=["GET","POST"])
 def index_post():
     class_list = ["All","50","25","10"] #首頁列表選單
