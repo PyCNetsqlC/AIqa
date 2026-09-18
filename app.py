@@ -79,7 +79,7 @@ scheduler = APScheduler()
 
 
 # 每天早上 24:30 固定執行
-@scheduler.task('cron', id='reload_job', hour=0, minute=30)
+@scheduler.task('cron', id='reload_job', hour=9, minute=00,timezone='Asia/Taipei')
 def reload_job():
     global reload_job_times,csv_dict
 
@@ -113,7 +113,7 @@ def reload_job():
                 f"原始錯誤: {backup_error}"
             )
     reload_job_times += 1
-    print(f"定時更新次數:{reload_job_times}")
+    print(f"定時更新次數:{reload_job_times}", flush=True)
 
 
 scheduler.init_app(app)
