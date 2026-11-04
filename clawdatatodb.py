@@ -15,7 +15,7 @@ def returnnal(mainurl:str,DB:str):
     response.encoding = response.apparent_encoding
     soup = BeautifulSoup(response.text, 'html.parser')
     study_guidelines = soup.find_all('script')
-    strfire = str(study_guidelines[-2]).lstrip("<script>elf.__next_f.push([1,").rstrip("</script>").split(",")
+    strfire = str(study_guidelines[-1]).lstrip("<script>elf.__next_f.push([1,").rstrip("</script>").split(",")
     study_url = [ i.lstrip('\\"url\\":\\').rstrip('\"\\') for i in strfire if ('\\"url\\":\\"' in i) and ("初級" in i) and ("試題" in i) ]
     #study_url = [ i.lstrip('\\"url\\":\\').rstrip('\"\\').replace(" ","%20") for i in strfire if ('\\"url\\":\\"' in i) and ("資訊安全" in i) and ("學習" not in i) ]
 
