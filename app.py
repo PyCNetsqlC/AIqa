@@ -52,15 +52,15 @@ if time==0: #system loading.....
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
     DB_2 = os.environ.get("DB_2")
-    re_db = returnnal(mainurl,DB)#資料抓取&資料庫資料更新函式
+    returnnal(mainurl,DB)#資料抓取&資料庫資料更新函式
 
     #資料庫載入 
     try:
         # 1. 嘗試讀取主要資料庫
-        csv_dict = db_reload(re_db)
+        csv_dict = db_reload(DB)
         if len(csv_dict) == 0:
-            re_db1 = returnnal(mainurl, DB)
-            csv_dict = db_reload(re_db1)
+            returnnal(mainurl, DB)
+            csv_dict = db_reload(DB)
             if len(csv_dict) == 0:
                 csv_dict = db_reload(DB_2)
                 raise ValueError("主資料庫內容為空，啟用備用資料庫")
@@ -96,13 +96,13 @@ def reload_job():
 
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
-    re_db = returnnal(mainurl,DB)
+    returnnal(mainurl,DB)
     try:
         # 1. 嘗試讀取主要資料庫
-        csv_dict = db_reload(re_db)
+        csv_dict = db_reload(DB)
         if len(csv_dict) == 0:
-            re_db1 = returnnal(mainurl, DB)
-            csv_dict = db_reload(re_db1)
+            returnnal(mainurl, DB)
+            csv_dict = db_reload(DB)
             if len(csv_dict) == 0:
                 csv_dict = db_reload(DB_2)
                 raise ValueError("主資料庫內容為空，啟用備用資料庫")
