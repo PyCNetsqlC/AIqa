@@ -4,7 +4,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+<<<<<<< HEAD
 from services.question_bank import CsvQuestionRepository, QuestionBankService
+=======
+from services.question_bank import CsvQuestionRepository
+>>>>>>> 01cb9de55b61b57460d578138990a42ebcef4319
 from services.quiz_service import QuizScoringService, QuizService
 
 
@@ -51,6 +55,7 @@ class QuizScoringServiceTests(unittest.TestCase):
         self.assertEqual(result["wrong_records"][0]["correct_ans"], "C")
 
 
+<<<<<<< HEAD
 class QuestionBankServiceTests(unittest.TestCase):
     def _write_csv(self, path, rows):
         with open(path, "w", encoding="utf-8-sig", newline="") as file:
@@ -106,5 +111,7 @@ class QuestionBankServiceTests(unittest.TestCase):
             crawler.assert_not_called()
 
 
+=======
+>>>>>>> 01cb9de55b61b57460d578138990a42ebcef4319
 if __name__ == "__main__":
     unittest.main()
