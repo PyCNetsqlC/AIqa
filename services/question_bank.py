@@ -22,7 +22,7 @@ from clawdatatodb import returnnal
 class CsvQuestionRepository:
     """Load the existing seven-column question CSV into the legacy dict shape."""
 
-    def load(self, db_path: str) -> Dict[int, Dict[str, str]]:
+    """def load(self, db_path: str) -> Dict[int, Dict[str, str]]:
         if not db_path:
             raise ValueError("題庫路徑未設定")
 
@@ -40,6 +40,8 @@ class CsvQuestionRepository:
             if len(row) < 7 or len(headers) < 7:
                 raise ValueError(f"CSV 第 {index + 1} 列欄位不足，預期至少 7 欄")
             question_data[index] = {headers[column]: row[column] for column in range(7)}
+    """
+ 
     """Loads the existing seven-column question CSV into the legacy dict shape."""
 
     def load(self, db_path: str) -> Dict[int, Dict[str, str]]:
