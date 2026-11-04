@@ -10,20 +10,31 @@ global csv_dict
 load_dotenv()
 
 #資料庫載入函式
-def db_reload(DB):
-    with open(DB, mode="r", encoding="utf-8-sig",newline="") as f:
-        csvfile = csv.reader(f)
-        csv_text = [row for row in csvfile]
-        _csv_dict = dict()
-        for i in range(1,len(csv_text)):
-            _csv_dict.update({i:{csv_text[0][0]:csv_text[i][0],
-                        csv_text[0][1]:csv_text[i][1],
-                        csv_text[0][2]:csv_text[i][2],
-                        csv_text[0][3]:csv_text[i][3],
-                        csv_text[0][4]:csv_text[i][4],
-                        csv_text[0][5]:csv_text[i][5],
-                        csv_text[0][6]:csv_text[i][6]}})
-        return _csv_dict
+def db_reload(DB:str | list):
+    _csv_dict = dict()
+    if isinstance(DB, str):
+        with open(DB, mode="r", encoding="utf-8-sig",newline="") as f:
+            csvfile = csv.reader(f)
+            csv_text = [row for row in csvfile]
+            for i in range(1,len(csv_text)):
+                _csv_dict.update({i:{csv_text[0][0]:csv_text[i][0],
+                            csv_text[0][1]:csv_text[i][1],
+                            csv_text[0][2]:csv_text[i][2],
+                            csv_text[0][3]:csv_text[i][3],
+                            csv_text[0][4]:csv_text[i][4],
+                            csv_text[0][5]:csv_text[i][5],
+                            csv_text[0][6]:csv_text[i][6]}})
+    else:
+        for i in range(1,len(DB)):
+            _csv_dict.update({i:{DB[0][0]:DB[i][0],
+                        DB[0][1]:DB[i][1],
+                        DB[0][2]:DB[i][2],
+                        DB[0][3]:DB[i][3],
+                        DB[0][4]:DB[i][4],
+                        DB[0][5]:DB[i][5],
+                        DB[0][6]:DB[i][6]}})
+
+    return _csv_dict
     
 
 
@@ -41,15 +52,15 @@ if time==0: #system loading.....
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
     DB_2 = os.environ.get("DB_2")
-    returnnal(mainurl,DB)#資料抓取&資料庫資料更新函式
+    re_db = returnnal(mainurl,DB)#資料抓取&資料庫資料更新函式
 
     #資料庫載入 
     try:
         # 1. 嘗試讀取主要資料庫
-        csv_dict = db_reload(DB)
+        csv_dict = db_reload(re_db)
         if len(csv_dict) == 0:
-            returnnal(mainurl, DB)
-            csv_dict = db_reload(DB)
+            re_db1 = returnnal(mainurl, DB)
+            csv_dict = db_reload(re_db1)
             if len(csv_dict) == 0:
                 csv_dict = db_reload(DB_2)
                 raise ValueError("主資料庫內容為空，啟用備用資料庫")
@@ -85,13 +96,13 @@ def reload_job():
 
     mainurl = os.environ.get("MAIN_URL")
     DB = os.environ.get("DB")
-    returnnal(mainurl,DB)
+    re_db = returnnal(mainurl,DB)
     try:
         # 1. 嘗試讀取主要資料庫
-        csv_dict = db_reload(DB)
+        csv_dict = db_reload(re_db)
         if len(csv_dict) == 0:
-            returnnal(mainurl, DB)
-            csv_dict = db_reload(DB)
+            re_db1 = returnnal(mainurl, DB)
+            csv_dict = db_reload(re_db1)
             if len(csv_dict) == 0:
                 csv_dict = db_reload(DB_2)
                 raise ValueError("主資料庫內容為空，啟用備用資料庫")
